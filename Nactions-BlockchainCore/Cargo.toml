@@ -1,0 +1,44 @@
+[package]
+name = "nactions_blockchain_core"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+name = "nactions_blockchain_core"
+# This creates a dynamic library that can be used by Swift
+crate-type = ["staticlib", "cdylib"]
+
+[dependencies]
+# Core blockchain functionality
+ed25519-dalek = "1.0"  # For cryptographic signatures
+blake3 = "1.3"         # Fast cryptographic hash function
+leveldb = "0.8"        # Key-value store for blockchain state
+serde = { version = "1.0", features = ["derive"] }  # Serialization
+serde_json = "1.0"     # JSON serialization
+bincode = "1.3"        # Binary serialization (more efficient)
+chrono = "0.4"         # Time handling
+
+# FFI and Swift interop
+cbindgen = "0.24"      # C bindings generation
+libc = "0.2"           # C types for FFI
+
+# Security
+ring = "0.16"          # Cryptography
+rand = "0.8"           # Secure random number generation
+zeroize = "1.5"        # Secure memory clearing
+
+# Error handling
+thiserror = "1.0"      # Better error types
+anyhow = "1.0"         # Error propagation
+
+[dev-dependencies]
+criterion = "0.3"      # Benchmarking
+mockall = "0.11"       # Mocking for tests
+tempfile = "3.3"       # Temporary files for tests
+
+[profile.release]
+lto = true             # Link-time optimization
+codegen-units = 1      # More optimization
+opt-level = 3          # Maximum optimization
+panic = "abort"        # Smaller code size
+strip = true           # Remove debug symbols
