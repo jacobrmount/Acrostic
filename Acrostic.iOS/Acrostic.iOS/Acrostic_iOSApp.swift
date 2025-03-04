@@ -1,17 +1,16 @@
 // Acrostic.iOS/Acrostic_iOSApp.swift
 import SwiftUI
 import AcrostiKit
-import WidgetKit
 
 @main
-struct NactionsApp: App {
+struct AcrosticApp: App {
     // Initialize Core Data stack
     let coreDataStack = CoreDataStack.shared
     
     init() {
-        print("⚡ Nactions app initializing...")
+        print("⚡ Acrostic app initializing...")
         
-        // Set up any necessary Core Data transformers
+        // Set up Core Data transformers
         setupValueTransformers()
         
         // Configure app for widget sharing
@@ -23,6 +22,17 @@ struct NactionsApp: App {
         // Initialize Core Data stack and verify model
         let coreDataStack = CoreDataStack.shared
         coreDataStack.verifyModelAccess()
+        
+        // Execute Core Data migration if needed
+        Task {
+            do {
+                let migration = CoreDataMigration(coreDataStack: coreDataStack)
+                try await migration.migrateIfNeeded()
+                print("✅ Core Data migration completed successfully or not needed")
+            } catch {
+                print("❌ Core Data migration failed: \(error)")
+            }
+        }
         
         // Verify app group access
         let groupAccessSuccessful = AppGroupConfig.verifyAppGroupAccess()
@@ -37,7 +47,7 @@ struct NactionsApp: App {
             }
         }
         
-        print("✅ Nactions app initialization complete")
+        print("✅ Acrostic app initialization complete")
     }
     
     var body: some Scene {
@@ -56,9 +66,9 @@ struct NactionsApp: App {
     }
     
     private func setupValueTransformers() {
-        // Register Core Data transformers
-        RichTextTransformer.register()
-        NotionPropertiesTransformer.register()
+        // Register needed CoreData transformers
+        // This is normally a placeholder for any Core Data transformer registration
+        // if using any custom transformers, they would be registered here
     }
     
     private func refreshDataOnLaunch() {
@@ -69,9 +79,6 @@ struct NactionsApp: App {
             
             // Share data with widgets
             await AppGroupConfig.refreshWidgetData()
-            
-            // Force a widget refresh
-            WidgetCenter.shared.reloadAllTimelines()
             
             // Clean up old cache data
             AppGroupConfig.cleanupCacheData()

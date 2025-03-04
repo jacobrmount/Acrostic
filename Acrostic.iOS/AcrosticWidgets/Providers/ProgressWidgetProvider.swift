@@ -12,7 +12,7 @@ struct ProgressWidgetProvider: AppIntentTimelineProvider {
         ProgressEntry(
             date: Date(),
             configuration: ProgressWidgetConfigurationIntent(),
-            progress: NactionsKit.ProgressData.sample,
+            progress: AcrostiKit.ProgressData.sample,
             error: nil
         )
     }
@@ -22,7 +22,7 @@ struct ProgressWidgetProvider: AppIntentTimelineProvider {
         ProgressEntry(
             date: Date(),
             configuration: configuration,
-            progress: NactionsKit.ProgressData.sample,
+            progress: AcrostiKit.ProgressData.sample,
             error: nil
         )
     }
@@ -39,7 +39,7 @@ struct ProgressWidgetProvider: AppIntentTimelineProvider {
             let entry = ProgressEntry(
                 date: currentDate,
                 configuration: configuration,
-                progress: NactionsKit.ProgressData(title: configuration.title, currentValue: 0, targetValue: 0),
+                progress: AcrostiKit.ProgressData(title: configuration.title, currentValue: 0, targetValue: 0),
                 error: "Please configure the widget with valid Notion settings."
             )
             return Timeline(entries: [entry], policy: .never)
@@ -72,7 +72,7 @@ struct ProgressWidgetProvider: AppIntentTimelineProvider {
             let entry = ProgressEntry(
                 date: currentDate,
                 configuration: configuration,
-                progress: NactionsKit.ProgressData(title: configuration.title, currentValue: 0, targetValue: 0),
+                progress: AcrostiKit.ProgressData(title: configuration.title, currentValue: 0, targetValue: 0),
                 error: "Failed to fetch progress data: \(error.localizedDescription)"
             )
             return Timeline(entries: [entry], policy: .after(Date().addingTimeInterval(300)))
@@ -87,9 +87,9 @@ struct ProgressWidgetProvider: AppIntentTimelineProvider {
         title: String,
         currentValueProperty: String,
         targetValueProperty: String
-    ) async throws -> NactionsKit.ProgressData {
+    ) async throws -> AcrostiKit.ProgressData {
         // Try to get from shared UserDefaults cache first
-        if let userDefaults = UserDefaults(suiteName: "group.com.nactions"),
+        if let userDefaults = UserDefaults(suiteName: "group.com.acrostic"),
            let cachedProgress = getCachedProgress(userDefaults: userDefaults, tokenID: tokenID, databaseID: databaseID) {
             return cachedProgress
         }
@@ -101,12 +101,12 @@ struct ProgressWidgetProvider: AppIntentTimelineProvider {
         }
         
         // Get token data
-        let tokenDataController = NactionsKit.TokenDataController.shared
+        let tokenDataController = AcrostiKit.TokenDataController.shared
         let token = tokenDataController.fetchToken(id: tokenUUID)
         
         // If we can't find the token, throw an error
         guard let token = token,
-              let apiToken = NactionsKit.TokenDataController.shared.getSecureToken(for: tokenUUID.uuidString) else {
+              let apiToken = AcrostiKit.TokenDataController.shared.getSecureToken(for: tokenUUID.uuidString) else {
             throw WidgetError.tokenNotFound
         }
         
@@ -155,7 +155,7 @@ struct ProgressWidgetProvider: AppIntentTimelineProvider {
         let progress = ProgressData(title: title, currentValue: currentValue, targetValue: targetValue)
         
         // Cache the result
-        if let userDefaults = UserDefaults(suiteName: "group.com.nactions") {
+        if let userDefaults = UserDefaults(suiteName: "group.com.acrostic") {
             cacheProgress(userDefaults: userDefaults, progress: progress, tokenID: tokenID, databaseID: databaseID)
         }
         
@@ -165,7 +165,7 @@ struct ProgressWidgetProvider: AppIntentTimelineProvider {
     // MARK: - Caching Helpers
     
     private func getCachedProgress(userDefaults: UserDefaults, tokenID: String, databaseID: String) -> ProgressData? {
-        let key = "nactions_progress_\(tokenID)_\(databaseID)"
+        let key = "acrostic_progress_\(tokenID)_\(databaseID)"
         
         guard let dict = userDefaults.dictionary(forKey: key),
               let timestamp = dict["timestamp"] as? TimeInterval,
@@ -184,7 +184,7 @@ struct ProgressWidgetProvider: AppIntentTimelineProvider {
     }
     
     private func cacheProgress(userDefaults: UserDefaults, progress: ProgressData, tokenID: String, databaseID: String) {
-        let key = "nactions_progress_\(tokenID)_\(databaseID)"
+        let key = "acrostic_progress_\(tokenID)_\(databaseID)"
         
         let progressDict: [String: Any] = [
             "timestamp": Date().timeIntervalSince1970,

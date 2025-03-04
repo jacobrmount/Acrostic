@@ -1,6 +1,6 @@
 // Acrostic.iOS/Presentation/ContentView.swift
 import SwiftUI
-import NactionsKit
+import AcrostiKit
 
 struct ContentView: View {
     @StateObject private var tabCoordinator = TabViewCoordinator.shared

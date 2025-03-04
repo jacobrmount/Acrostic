@@ -1,6 +1,6 @@
 // Acrostic.iOS/Presentation/DatabaseView.swift
 import SwiftUI
-import NactionsKit
+import AcrostiKit
 
 struct DatabaseView: View {
     @ObservedObject var databaseService = DatabaseService.shared

@@ -43,7 +43,7 @@ struct ProgressWidget: Widget {
 
 // MARK: - Widget Bundle
 @main
-struct NactionsWidgetsBundle: WidgetBundle {
+struct AcrosticWidgetsBundle: WidgetBundle {
     init() {
         // Verify app group access on launch
         let groupAccessSuccessful = AppGroupConfig.verifyAppGroupAccess()

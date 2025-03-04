@@ -3,7 +3,7 @@ import AppIntents
 import SwiftUI
 import WidgetKit
 
-struct NactionsWidgetsControl: ControlWidget {
+struct AcrosticWidgetsControl: ControlWidget {
     static let kind: String = "jmount.Acrostic_iOS.AcrosticWidgets"
 
     var body: some ControlWidgetConfiguration {
@@ -24,7 +24,7 @@ struct NactionsWidgetsControl: ControlWidget {
     }
 }
 
-extension NactionsWidgetsControl {
+extension AcrosticWidgetsControl {
     struct Value {
         var isRunning: Bool
         var name: String
@@ -32,12 +32,12 @@ extension NactionsWidgetsControl {
 
     struct Provider: AppIntentControlValueProvider {
         func previewValue(configuration: TimerConfiguration) -> Value {
-            NactionsWidgetsControl.Value(isRunning: false, name: configuration.timerName)
+            AcrosticWidgetsControl.Value(isRunning: false, name: configuration.timerName)
         }
 
         func currentValue(configuration: TimerConfiguration) async throws -> Value {
             let isRunning = true // Check if the timer is running
-            return NactionsWidgetsControl.Value(isRunning: isRunning, name: configuration.timerName)
+            return AcrosticWidgetsControl.Value(isRunning: isRunning, name: configuration.timerName)
         }
     }
 }

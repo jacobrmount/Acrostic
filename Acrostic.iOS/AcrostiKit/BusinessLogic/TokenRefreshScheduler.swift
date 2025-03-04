@@ -4,7 +4,7 @@ import BackgroundTasks
 
 public final class TokenRefreshScheduler {
     public static let shared = TokenRefreshScheduler()
-    public let taskIdentifier = "com.nactions.tokenRefresh"
+    public let taskIdentifier = "com.acrostic.tokenRefresh"
     
     private init() {}
     

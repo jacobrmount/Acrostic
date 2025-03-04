@@ -96,7 +96,7 @@ struct TaskWidgetEntryView: View {
         }
     }
     
-    private func limitTasksForWidgetSize() -> [NactionsKit.TaskItem] {
+    private func limitTasksForWidgetSize() -> [AcrostiKit.TaskItem] {
         switch widgetFamily {
         case .systemSmall:
             return Array(entry.tasks.prefix(3))

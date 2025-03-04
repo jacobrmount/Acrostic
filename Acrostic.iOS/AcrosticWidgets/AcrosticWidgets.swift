@@ -35,7 +35,7 @@ struct SimpleEntry: TimelineEntry {
     let configuration: ConfigurationAppIntent
 }
 
-struct NactionsWidgetsEntryView : View {
+struct AcrosticWidgetsEntryView : View {
     var entry: Provider.Entry
 
     var body: some View {
@@ -47,12 +47,12 @@ struct NactionsWidgetsEntryView : View {
     }
 }
 
-struct NactionsWidgets: Widget {
-    let kind: String = "NactionsWidgets"
+struct AcrosticWidgets: Widget {
+    let kind: String = "AcrosticWidgets"
 
     var body: some WidgetConfiguration {
         AppIntentConfiguration(kind: kind, intent: ConfigurationAppIntent.self, provider: Provider()) { entry in
-            NactionsWidgetsEntryView(entry: entry)
+            AcrosticWidgetsEntryView(entry: entry)
                 .containerBackground(.fill.tertiary, for: .widget)
         }
     }
@@ -73,7 +73,7 @@ extension ConfigurationAppIntent {
 }
 
 #Preview(as: .systemSmall) {
-    NactionsWidgets()
+    AcrosticWidgets()
 } timeline: {
     SimpleEntry(date: .now, configuration: .smiley)
     SimpleEntry(date: .now, configuration: .starEyes)

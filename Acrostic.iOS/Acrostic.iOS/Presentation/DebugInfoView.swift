@@ -1,6 +1,6 @@
 // Acrostic.iOS/Presentation/DebugInfoView.swift
 import SwiftUI
-import NactionsKit
+import AcrostiKit
 
 struct DebugInfoView: View {
     @ObservedObject var tokenService = TokenService.shared

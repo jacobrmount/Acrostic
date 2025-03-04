@@ -1,7 +1,7 @@
 // Acrostic.iOS/Presentation/TokenView.swift
 import SwiftUI
 import LocalAuthentication
-import NactionsKit
+import AcrostiKit
 
 struct TokenView: View {
     @ObservedObject var tokenManager = TokenService.shared

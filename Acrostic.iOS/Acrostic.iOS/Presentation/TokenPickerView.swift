@@ -1,6 +1,6 @@
 // Acrostic.iOS/Presentation/TokenPickerView.swift
 import SwiftUI
-import NactionsKit
+import AcrostiKit
 
 struct TokenPickerView: View {
     @ObservedObject var tokenManager: TokenService

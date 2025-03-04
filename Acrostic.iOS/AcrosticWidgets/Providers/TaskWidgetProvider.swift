@@ -12,7 +12,7 @@ struct TaskWidgetProvider: AppIntentTimelineProvider {
         TaskEntry(
             date: Date(),
             configuration: TaskWidgetConfigurationIntent(),
-            tasks: NactionsKit.TaskItem.samples,
+            tasks: AcrostiKit.TaskItem.samples,
             error: nil
         )
     }
@@ -22,7 +22,7 @@ struct TaskWidgetProvider: AppIntentTimelineProvider {
         TaskEntry(
             date: Date(),
             configuration: configuration,
-            tasks: NactionsKit.TaskItem.samples,
+            tasks: AcrostiKit.TaskItem.samples,
             error: nil
         )
     }
@@ -89,11 +89,11 @@ struct TaskWidgetProvider: AppIntentTimelineProvider {
     
     // MARK: - API Methods
     
-    private func fetchTasks(tokenID: String, databaseID: String, count: Int, showCompleted: Bool) async throws -> [NactionsKit.TaskItem] {
+    private func fetchTasks(tokenID: String, databaseID: String, count: Int, showCompleted: Bool) async throws -> [AcrostiKit.TaskItem] {
         print("🔍 Fetching tasks for token: \(tokenID), database: \(databaseID)")
         
         // Try to get from shared UserDefaults cache first
-        if let userDefaults = UserDefaults(suiteName: "group.com.nactions"),
+        if let userDefaults = UserDefaults(suiteName: "group.com.acrostic"),
            let cachedTasks = getCachedTasks(userDefaults: userDefaults, tokenID: tokenID, databaseID: databaseID) {
             print("✅ Using cached tasks: \(cachedTasks.count) tasks found")
             
@@ -117,7 +117,7 @@ struct TaskWidgetProvider: AppIntentTimelineProvider {
         }
         
         // Get token data
-        let tokenDataController = NactionsKit.TokenDataController.shared
+        let tokenDataController = AcrostiKit.TokenDataController.shared
         let token = tokenDataController.fetchToken(id: tokenUUID)
         
         // If we can't find the token, throw an error
@@ -177,7 +177,7 @@ struct TaskWidgetProvider: AppIntentTimelineProvider {
         }
         
         // Cache results for future widget updates
-        if let userDefaults = UserDefaults(suiteName: "group.com.nactions") {
+        if let userDefaults = UserDefaults(suiteName: "group.com.acrostic") {
             cacheTasksInUserDefaults(tasks, tokenID: tokenID, databaseID: databaseID, userDefaults: userDefaults)
             print("✅ Cached \(tasks.count) tasks for future widget updates")
         }
@@ -463,12 +463,12 @@ struct TaskWidgetProvider: AppIntentTimelineProvider {
             "tasks": taskDicts
         ]
         
-        userDefaults.set(cacheData, forKey: "nactions_tasks_\(tokenID)_\(databaseID)")
+        userDefaults.set(cacheData, forKey: "acrostic_tasks_\(tokenID)_\(databaseID)")
     }
     
     // Get cached tasks from UserDefaults
     private func getCachedTasks(userDefaults: UserDefaults, tokenID: String, databaseID: String) -> [TaskItem]? {
-        let key = "nactions_tasks_\(tokenID)_\(databaseID)"
+        let key = "acrostic_tasks_\(tokenID)_\(databaseID)"
         
         guard let cacheData = userDefaults.dictionary(forKey: key) else {
             print("⚠️ No cached data found for key: \(key)")
