@@ -19,7 +19,7 @@ struct DatabaseEntityIntent: AppEntity {
 
 struct DatabaseQueryIntent: EntityQuery {
     func entities(for identifiers: [String]) async throws -> [DatabaseEntityIntent] {
-        guard let userDefaults = UserDefaults(suiteName: "group.com.nactions") else {
+        guard let userDefaults = UserDefaults(suiteName: "group.com.acrostic") else {
             print("❌ Could not access UserDefaults for app group")
             return []
         }
@@ -38,13 +38,13 @@ struct DatabaseQueryIntent: EntityQuery {
     }
     
     func suggestedEntities() async throws -> [DatabaseEntityIntent] {
-        guard let userDefaults = UserDefaults(suiteName: "group.com.nactions") else {
+        guard let userDefaults = UserDefaults(suiteName: "group.com.acrostic") else {
             print("❌ Could not access UserDefaults for app group in suggestedEntities")
             return []
         }
         
         // Get all tokens
-        guard let tokenDataArray = userDefaults.array(forKey: "nactions_tokens") as? [[String: Any]] else {
+        guard let tokenDataArray = userDefaults.array(forKey: "acrostic_tokens") as? [[String: Any]] else {
             print("❌ No tokens found in UserDefaults")
             return []
         }
@@ -59,7 +59,7 @@ struct DatabaseQueryIntent: EntityQuery {
             }
             
             // Get all databases for this token
-            let key = "nactions_databases_\(tokenID)"
+            let key = "acrostic_databases_\(tokenID)"
             guard let databasesData = userDefaults.array(forKey: key) as? [[String: Any]] else {
                 continue
             }
@@ -88,7 +88,7 @@ struct DatabaseQueryIntent: EntityQuery {
                 }
                 
                 // Get all databases for this token
-                let key = "nactions_databases_\(tokenID)"
+                let key = "acrostic_databases_\(tokenID)"
                 guard let databasesData = userDefaults.array(forKey: key) as? [[String: Any]] else {
                     continue
                 }
@@ -110,7 +110,7 @@ struct DatabaseQueryIntent: EntityQuery {
     // Helper to find database data by ID
     private func findDatabaseInUserDefaults(userDefaults: UserDefaults, databaseID: String) -> DatabaseEntityIntent? {
         // Get all tokens
-        guard let tokenDataArray = userDefaults.array(forKey: "nactions_tokens") as? [[String: Any]] else {
+        guard let tokenDataArray = userDefaults.array(forKey: "acrostic_tokens") as? [[String: Any]] else {
             return nil
         }
         
@@ -122,7 +122,7 @@ struct DatabaseQueryIntent: EntityQuery {
             }
             
             // Get all databases for this token
-            let key = "nactions_databases_\(tokenID)"
+            let key = "acrostic_databases_\(tokenID)"
             guard let databasesData = userDefaults.array(forKey: key) as? [[String: Any]] else {
                 continue
             }

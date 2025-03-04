@@ -1,6 +1,6 @@
 // Acrostic.iOS/Presentation/AddTokenView.swift
 import SwiftUI
-import NactionsKit
+import AcrostiKit
 
 struct AddTokenView: View {
     @Binding var tokenToEdit: NotionToken?

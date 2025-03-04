@@ -9,7 +9,7 @@ public final class TokenDataController {
     public static let shared = TokenDataController()
     
     // Key constants
-    public let tokenServiceName = "com.nactions.tokens"
+    public let tokenServiceName = "com.acrostic.tokens"
     
     private init() {}
     
@@ -17,11 +17,11 @@ public final class TokenDataController {
     
     /// Fetches all stored tokens
     public func fetchTokens() -> [NotionToken] {
-        let context = CoreDataStack.shared.viewContext
-        let request: NSFetchRequest<TokenEntity> = TokenEntity.fetchRequest()
-        request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
-        
         do {
+            let context = CoreDataStack.shared.viewContext
+            let request: NSFetchRequest<TokenEntity> = TokenEntity.fetchRequest()
+            request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
+            
             let tokenEntities = try context.fetch(request)
             return tokenEntities.compactMap { entity -> NotionToken? in
                 guard let id = entity.id else {
@@ -43,14 +43,65 @@ public final class TokenDataController {
             }
         } catch {
             print("Error fetching tokens: \(error)")
-            return []
+            // Fallback to keychain-only tokens if Core Data fails
+            return fetchTokensFromKeychain()
         }
+    }
+    
+    /// Fallback method to fetch tokens directly from keychain if Core Data fails
+    private func fetchTokensFromKeychain() -> [NotionToken] {
+        // This is a simplified fallback approach - in a real app you'd
+        // want a more robust solution for persistent token metadata
+        var tokens: [NotionToken] = []
+        
+        // Get all keychain items matching our service
+        let query: [String: Any] = [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrService as String: tokenServiceName,
+            kSecMatchLimit as String: kSecMatchLimitAll,
+            kSecReturnAttributes as String: true
+        ]
+        
+        var result: AnyObject?
+        let status = SecItemCopyMatching(query as CFDictionary, &result)
+        
+        if status == errSecSuccess, let items = result as? [[String: Any]] {
+            for item in items {
+                if let account = item[kSecAttrAccount as String] as? String,
+                   let tokenUUID = UUID(uuidString: account),
+                   let apiToken = getSecureToken(for: account) {
+                    
+                    // Create a basic token with the data we have
+                    let token = NotionToken(
+                        id: tokenUUID,
+                        name: "Token \(account.prefix(8))",
+                        apiToken: apiToken,
+                        isConnected: false,
+                        isActivated: false
+                    )
+                    
+                    tokens.append(token)
+                }
+            }
+        } else {
+            print("Keychain query failed with status: \(status)")
+        }
+        
+        return tokens
     }
     
     /// Fetches a specific token by ID
     public func fetchToken(id: UUID) -> TokenEntity? {
         let context = CoreDataStack.shared.viewContext
-        let request: NSFetchRequest<TokenEntity> = TokenEntity.fetchRequest()
+        
+        // First, ensure TokenEntity exists in the model
+        let entityNames = context.persistentStoreCoordinator?.managedObjectModel.entities.map { $0.name } ?? []
+        if !entityNames.contains("TokenEntity") {
+            print("⚠️ TokenEntity not found in model, cannot fetch token")
+            return nil
+        }
+        
+        let request = NSFetchRequest<TokenEntity>(entityName: "TokenEntity")
         request.predicate = NSPredicate(format: "id == %@", id as CVarArg)
         request.fetchLimit = 1
         
@@ -70,6 +121,18 @@ public final class TokenDataController {
     public func saveToken(name: String, apiToken: String) -> TokenEntity? {
         let context = CoreDataStack.shared.viewContext
         
+        // Check if TokenEntity exists in model
+        let entityNames = context.persistentStoreCoordinator?.managedObjectModel.entities.map { $0.name } ?? []
+        if !entityNames.contains("TokenEntity") {
+            print("⚠️ TokenEntity not found in model, cannot save token")
+            
+            // Fallback: Store in keychain only
+            let tokenUUID = UUID()
+            storeSecureToken(apiToken, for: tokenUUID.uuidString)
+            print("✅ Token stored in keychain only with ID: \(tokenUUID.uuidString)")
+            return nil
+        }
+        
         // Create a new token entity
         let tokenEntity = TokenEntity(context: context)
         tokenEntity.id = UUID()
@@ -86,6 +149,11 @@ public final class TokenDataController {
             return tokenEntity
         } catch {
             print("Error saving token: \(error)")
+            
+            // Fallback: Store in keychain only
+            storeSecureToken(apiToken, for: tokenEntity.id!.uuidString)
+            print("✅ Token stored in keychain only with ID: \(tokenEntity.id!.uuidString)")
+            
             return nil
         }
     }
@@ -95,6 +163,20 @@ public final class TokenDataController {
                            isActivated: Bool? = nil, workspaceID: String? = nil,
                            workspaceName: String? = nil, apiToken: String? = nil) {
         let context = CoreDataStack.shared.viewContext
+        
+        // Check if TokenEntity exists in model
+        let entityNames = context.persistentStoreCoordinator?.managedObjectModel.entities.map { $0.name } ?? []
+        if !entityNames.contains("TokenEntity") {
+            print("⚠️ TokenEntity not found in model, cannot update token")
+            
+            // Update keychain token if needed
+            if let apiToken = apiToken {
+                storeSecureToken(apiToken, for: id.uuidString)
+                print("✅ Token updated in keychain only with ID: \(id.uuidString)")
+            }
+            return
+        }
+        
         let request: NSFetchRequest<TokenEntity> = TokenEntity.fetchRequest()
         request.predicate = NSPredicate(format: "id == %@", id as CVarArg)
         
@@ -128,15 +210,38 @@ public final class TokenDataController {
                 }
                 
                 try context.save()
+            } else {
+                print("Token with ID \(id) not found for update")
+                
+                // If token not found in Core Data but apiToken provided, update keychain
+                if let apiToken = apiToken {
+                    storeSecureToken(apiToken, for: id.uuidString)
+                    print("✅ Token updated in keychain only with ID: \(id.uuidString)")
+                }
             }
         } catch {
             print("Error updating token: \(error)")
+            
+            // Fallback: Update keychain token if needed
+            if let apiToken = apiToken {
+                storeSecureToken(apiToken, for: id.uuidString)
+                print("✅ Token updated in keychain only with ID: \(id.uuidString)")
+            }
         }
     }
     
     /// Deletes a token
     public func deleteToken(id: UUID) {
         let context = CoreDataStack.shared.viewContext
+        
+        // Check if TokenEntity exists in model
+        let entityNames = context.persistentStoreCoordinator?.managedObjectModel.entities.map { $0.name } ?? []
+        if !entityNames.contains("TokenEntity") {
+            print("⚠️ TokenEntity not found in model, deleting token from keychain only")
+            removeSecureToken(for: id.uuidString)
+            return
+        }
+        
         let request: NSFetchRequest<TokenEntity> = TokenEntity.fetchRequest()
         request.predicate = NSPredicate(format: "id == %@", id as CVarArg)
         
@@ -148,9 +253,15 @@ public final class TokenDataController {
                 // Delete the entity
                 context.delete(token)
                 try context.save()
+            } else {
+                print("Token with ID \(id) not found for deletion")
+                // Still try to remove from keychain
+                removeSecureToken(for: id.uuidString)
             }
         } catch {
             print("Error deleting token: \(error)")
+            // Still try to remove from keychain
+            removeSecureToken(for: id.uuidString)
         }
     }
     

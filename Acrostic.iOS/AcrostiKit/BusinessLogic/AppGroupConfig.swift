@@ -5,7 +5,7 @@ import UIKit
 /// Handles configuration and access to shared app group resources
 public struct AppGroupConfig {
     /// The shared app group identifier
-    public static let appGroupIdentifier = "group.com.nactions"
+    public static let appGroupIdentifier = "group.com.acrostic"
     
     /// Shared user defaults for the app group
     public static var sharedUserDefaults: UserDefaults? {
@@ -21,7 +21,7 @@ public struct AppGroupConfig {
     /// Gets the shared Core Data store URL
     public static var sharedStoreURL: URL? {
         guard let containerURL = sharedContainerURL else { return nil }
-        return containerURL.appendingPathComponent("NactionsDataModel.sqlite")
+        return containerURL.appendingPathComponent("AcrosticDataModel.sqlite")
     }
     
     /// Checks if the app group is correctly configured and accessible
@@ -97,8 +97,8 @@ public struct AppGroupConfig {
         
         // Find cache keys (those with timestamps)
         let cacheKeys = allKeys.filter {
-            $0.starts(with: "nactions_tasks_") ||
-            $0.starts(with: "nactions_progress_")
+            $0.starts(with: "acrostic_tasks_") ||
+            $0.starts(with: "acrostic_progress_")
         }
         
         let now = Date().timeIntervalSince1970

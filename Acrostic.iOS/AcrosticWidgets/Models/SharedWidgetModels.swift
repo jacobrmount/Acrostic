@@ -1,13 +1,13 @@
 // AcrosticWidgets/Models/SharedWidgetModels.swift
 import WidgetKit
 import Foundation
-import NactionsKit
+import AcrostiKit
 
 // MARK: - Shared Widget Entry Models
 struct TaskEntry: TimelineEntry {
     let date: Date
     let configuration: TaskWidgetConfigurationIntent
-    let tasks: [NactionsKit.TaskItem]
+    let tasks: [AcrostiKit.TaskItem]
     let error: String?
     
     // Add debug info to help diagnose issues
@@ -35,7 +35,7 @@ struct TaskEntry: TimelineEntry {
 struct ProgressEntry: TimelineEntry {
     let date: Date
     let configuration: ProgressWidgetConfigurationIntent
-    let progress: NactionsKit.ProgressData
+    let progress: AcrostiKit.ProgressData
     let error: String?
     
     // Add debug info to help diagnose issues

@@ -63,7 +63,7 @@ public final class WidgetDataSharingService {
         }
         
         // Store in shared UserDefaults
-        userDefaults.set(widgetTokens, forKey: "nactions_tokens")
+        userDefaults.set(widgetTokens, forKey: "acrostic_tokens")
         print("✅ Stored \(tokens.count) tokens in shared UserDefaults")
     }
     
@@ -134,7 +134,7 @@ public final class WidgetDataSharingService {
             
             // Store in shared UserDefaults
             if !databases.isEmpty {
-                userDefaults.set(databases, forKey: "nactions_databases_\(tokenID.uuidString)")
+                userDefaults.set(databases, forKey: "acrostic_databases_\(tokenID.uuidString)")
                 print("✅ Stored \(databases.count) databases for token \(tokenID)")
             } else {
                 print("⚠️ No databases found for token \(tokenID)")
@@ -233,7 +233,7 @@ public final class WidgetDataSharingService {
             "tasks": taskDicts
         ]
         
-        userDefaults.set(cacheData, forKey: "nactions_tasks_\(tokenID)_\(databaseID)")
+        userDefaults.set(cacheData, forKey: "acrostic_tasks_\(tokenID)_\(databaseID)")
     }
     
     /// Extracts the title from a Notion page

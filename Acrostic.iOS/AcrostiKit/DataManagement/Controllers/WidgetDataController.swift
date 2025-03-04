@@ -233,7 +233,7 @@ public final class WidgetDataController {
     // Fix for the shareDataWithWidgets method in WidgetDataController
 
     public func shareDataWithWidgets() {
-        guard let userDefaults = UserDefaults(suiteName: "group.com.nactions") else {
+        guard let userDefaults = UserDefaults(suiteName: "group.com.acrostic") else {
             print("Failed to access shared UserDefaults")
             return
         }
@@ -250,7 +250,7 @@ public final class WidgetDataController {
             ]
         }
         
-        userDefaults.set(tokensData, forKey: "nactions_tokens")
+        userDefaults.set(tokensData, forKey: "acrostic_tokens")
         
         // Share database data for each token
         let dbController = DatabaseDataController.shared
@@ -266,7 +266,7 @@ public final class WidgetDataController {
                     "url": db.url ?? ""
                 ]
             }
-            userDefaults.set(databasesData, forKey: "nactions_databases_\(tokenID.uuidString)")
+            userDefaults.set(databasesData, forKey: "acrostic_databases_\(tokenID.uuidString)")
         }
         
         // Share task data for widget-enabled databases
@@ -298,7 +298,7 @@ public final class WidgetDataController {
                     ]
                     
                     if let tokenID = database.token?.id {
-                        userDefaults.set(taskCache, forKey: "nactions_tasks_\(tokenID.uuidString)_\(dbID)")
+                        userDefaults.set(taskCache, forKey: "acrostic_tasks_\(tokenID.uuidString)_\(dbID)")
                     }
                 }
             }
