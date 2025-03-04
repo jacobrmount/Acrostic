@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="23605" systemVersion="24C101" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithSwiftData="YES" userDefinedModelVersionIdentifier="">
+    <entity name="DatabaseEntity" representedClassName="DatabaseEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="createdTime" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="databaseDescription" optional="YES" attributeType="String"/>
+        <attribute name="id" optional="YES" attributeType="String"/>
+        <attribute name="lastEditedTime" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="lastSyncTiime" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="title" optional="YES" attributeType="String"/>
+        <attribute name="url" optional="YES" attributeType="String"/>
+        <attribute name="widgetEnabled" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="widgetType" optional="YES" attributeType="String"/>
+        <relationship name="pages" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="PageEntity" inverseName="database" inverseEntity="PageEntity"/>
+        <relationship name="token" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="TokenEntity" inverseName="databases" inverseEntity="TokenEntity"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="id"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="PageEntity" representedClassName="PageEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="archived" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="createdTime" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="id" optional="YES" attributeType="String"/>
+        <attribute name="lastEditedTime" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="lastSyncTime" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="parentDatabaseID" optional="YES" attributeType="String"/>
+        <attribute name="parentPageID" optional="YES" attributeType="String"/>
+        <attribute name="properties" optional="YES" attributeType="Binary"/>
+        <attribute name="title" optional="YES" attributeType="String"/>
+        <attribute name="url" optional="YES" attributeType="String"/>
+        <relationship name="database" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DatabaseEntity" inverseName="pages" inverseEntity="DatabaseEntity"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="id"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="QueryEntity" representedClassName="QueryEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="createdAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="databaseID" optional="YES" attributeType="String"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="queryData" optional="YES" attributeType="Binary"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="id"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="SearchFilterEntity" representedClassName="SearchFilterEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="createdAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="property" optional="YES" attributeType="String"/>
+        <attribute name="type" optional="YES" attributeType="String"/>
+        <attribute name="value" optional="YES" attributeType="String"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="id"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="TaskEntity" representedClassName="TaskEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="databaseID" optional="YES" attributeType="String"/>
+        <attribute name="dueDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="id" optional="YES" attributeType="String"/>
+        <attribute name="isCompleted" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="lastSyncTime" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="pageID" optional="YES" attributeType="String"/>
+        <attribute name="title" optional="YES" attributeType="String"/>
+        <attribute name="tokenID" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="id"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="TokenEntity" representedClassName="TokenEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="connectionStatus" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="isActivated" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="lastValidated" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="workspaceID" optional="YES" attributeType="String"/>
+        <attribute name="workspaceName" optional="YES" attributeType="String"/>
+        <relationship name="databases" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DatabaseEntity" inverseName="token" inverseEntity="DatabaseEntity"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="id"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="WidgetConfigurationEntity" representedClassName="WidgetConfigurationEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="configData" optional="YES" attributeType="Binary"/>
+        <attribute name="databaseID" optional="YES" attributeType="String"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="lastUpdated" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="tokenID" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="widgetFamily" optional="YES" attributeType="String"/>
+        <attribute name="widgetKind" optional="YES" attributeType="String"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="id"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+</model>

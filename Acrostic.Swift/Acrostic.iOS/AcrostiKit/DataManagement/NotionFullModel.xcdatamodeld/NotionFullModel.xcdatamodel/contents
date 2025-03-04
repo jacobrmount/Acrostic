@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="23605" systemVersion="24C101" minimumToolsVersion="Xcode 4.2" sourceLanguage="Objective-C" userDefinedModelVersionIdentifier="">
+    <entity name="Block" representedClassName="Block" syncable="YES">
+        <attribute name="archived" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="created_time" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="data" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromDataTransformerName" customClassName="NSDictionary" syncable="YES"/>
+        <attribute name="has_children" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="id" attributeType="String" syncable="YES"/>
+        <attribute name="in_trash" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="last_edited_time" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="type" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="children" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Block" inverseName="parent_block" inverseEntity="Block" syncable="YES"/>
+        <relationship name="comments" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Comment" inverseName="parent_block" inverseEntity="Comment" syncable="YES"/>
+        <relationship name="created_by" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="blocks_created" inverseEntity="User" syncable="YES"/>
+        <relationship name="last_edited_by" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="blocks_last_edited" inverseEntity="User" syncable="YES"/>
+        <relationship name="parent_block" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Block" inverseName="children" inverseEntity="Block" syncable="YES"/>
+        <relationship name="parent_page" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Page" inverseName="blocks" inverseEntity="Page" syncable="YES"/>
+    </entity>
+    <entity name="Comment" representedClassName="Comment" syncable="YES">
+        <attribute name="created_time" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="discussion_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="id" attributeType="String" syncable="YES"/>
+        <attribute name="last_edited_time" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="rich_text" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromDataTransformerName" customClassName="NSArray" syncable="YES"/>
+        <relationship name="created_by" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="comments_created" inverseEntity="User" syncable="YES"/>
+        <relationship name="parent_block" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Block" inverseName="comments" inverseEntity="Block" syncable="YES"/>
+        <relationship name="parent_page" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Page" inverseName="comments" inverseEntity="Page" syncable="YES"/>
+    </entity>
+    <entity name="Database" representedClassName="Database" syncable="YES">
+        <attribute name="archived" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="created_time" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="id" attributeType="String" syncable="YES"/>
+        <attribute name="in_trash" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="last_edited_time" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="notionDescription" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromDataTransformerName" customClassName="NSArray" syncable="YES"/>
+        <attribute name="properties" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromDataTransformerName" customClassName="NSDictionary" syncable="YES"/>
+        <attribute name="title" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromDataTransformerName" customClassName="NSArray" syncable="YES"/>
+        <attribute name="url" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="cover" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="File" inverseName="cover_databases" inverseEntity="File" syncable="YES"/>
+        <relationship name="created_by" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="databases_created" inverseEntity="User" syncable="YES"/>
+        <relationship name="icon_emoji" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Emoji" inverseName="icon_databases" inverseEntity="Emoji" syncable="YES"/>
+        <relationship name="icon_file" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="File" inverseName="icon_databases" inverseEntity="File" syncable="YES"/>
+        <relationship name="last_edited_by" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="databases_last_edited" inverseEntity="User" syncable="YES"/>
+        <relationship name="pages" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Page" inverseName="parent_database" inverseEntity="Page" syncable="YES"/>
+        <relationship name="parent_page" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Page" inverseName="child_databases" inverseEntity="Page" syncable="YES"/>
+    </entity>
+    <entity name="Emoji" representedClassName="Emoji" syncable="YES">
+        <attribute name="custom_emoji_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="custom_emoji_name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="custom_emoji_url" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="emoji" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="type" attributeType="String" syncable="YES"/>
+        <relationship name="icon_databases" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Database" inverseName="icon_emoji" inverseEntity="Database" syncable="YES"/>
+        <relationship name="icon_pages" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Page" inverseName="icon_emoji" inverseEntity="Page" syncable="YES"/>
+    </entity>
+    <entity name="File" representedClassName="File" syncable="YES">
+        <attribute name="expiry_time" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="type" attributeType="String" syncable="YES"/>
+        <attribute name="url" attributeType="String" syncable="YES"/>
+        <relationship name="cover_databases" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Database" inverseName="cover" inverseEntity="Database" syncable="YES"/>
+        <relationship name="cover_pages" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Page" inverseName="cover" inverseEntity="Page" syncable="YES"/>
+        <relationship name="icon_databases" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Database" inverseName="icon_file" inverseEntity="Database" syncable="YES"/>
+        <relationship name="icon_pages" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Page" inverseName="icon_file" inverseEntity="Page" syncable="YES"/>
+    </entity>
+    <entity name="Page" representedClassName="Page" syncable="YES">
+        <attribute name="archived" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="created_time" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="id" attributeType="String" syncable="YES"/>
+        <attribute name="in_trash" optional="YES" attributeType="Boolean" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="last_edited_time" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="properties" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromDataTransformerName" customClassName="NSDictionary" syncable="YES"/>
+        <attribute name="public_url" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="url" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="blocks" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Block" inverseName="parent_page" inverseEntity="Block" syncable="YES"/>
+        <relationship name="child_databases" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Database" inverseName="parent_page" inverseEntity="Database" syncable="YES"/>
+        <relationship name="child_pages" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Page" inverseName="parent_page" inverseEntity="Page" syncable="YES"/>
+        <relationship name="comments" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Comment" inverseName="parent_page" inverseEntity="Comment" syncable="YES"/>
+        <relationship name="cover" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="File" inverseName="cover_pages" inverseEntity="File" syncable="YES"/>
+        <relationship name="created_by" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="pages_created" inverseEntity="User" syncable="YES"/>
+        <relationship name="icon_emoji" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Emoji" inverseName="icon_pages" inverseEntity="Emoji" syncable="YES"/>
+        <relationship name="icon_file" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="File" inverseName="icon_pages" inverseEntity="File" syncable="YES"/>
+        <relationship name="last_edited_by" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="pages_last_edited" inverseEntity="User" syncable="YES"/>
+        <relationship name="parent_database" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Database" inverseName="pages" inverseEntity="Database" syncable="YES"/>
+        <relationship name="parent_page" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Page" inverseName="child_pages" inverseEntity="Page" syncable="YES"/>
+    </entity>
+    <entity name="User" representedClassName="User" syncable="YES">
+        <attribute name="avatar_url" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="email" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="id" attributeType="String" syncable="YES"/>
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="owner_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="owner_type" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="type" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="workspace_name" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="blocks_created" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Block" inverseName="created_by" inverseEntity="Block" syncable="YES"/>
+        <relationship name="blocks_last_edited" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Block" inverseName="last_edited_by" inverseEntity="Block" syncable="YES"/>
+        <relationship name="comments_created" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Comment" inverseName="created_by" inverseEntity="Comment" syncable="YES"/>
+        <relationship name="databases_created" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Database" inverseName="created_by" inverseEntity="Database" syncable="YES"/>
+        <relationship name="databases_last_edited" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Database" inverseName="last_edited_by" inverseEntity="Database" syncable="YES"/>
+        <relationship name="pages_created" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Page" inverseName="created_by" inverseEntity="Page" syncable="YES"/>
+        <relationship name="pages_last_edited" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Page" inverseName="last_edited_by" inverseEntity="Page" syncable="YES"/>
+    </entity>
+</model>
