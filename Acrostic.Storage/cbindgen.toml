@@ -1,0 +1,12 @@
+language = "C"
+header = "/* Acrostic Storage - C Interface */"
+include_guard = "acrostic_storage.h"
+style = "tag"
+cpp_compat = true
+
+[parse]
+parse_deps = true
+include = ["acrostic_storage"]
+
+[export]
+prefix = "NBC_"

@@ -13,7 +13,7 @@ fn main() {
         .with_language(cbindgen::Language::C)
         .generate()
         .expect("Unable to generate C bindings")
-        .write_to_file(out_dir.join("include/nactions_blockchain_core.h"));
+        .write_to_file(out_dir.join("include/acrostic_storage.h"));
         
     // Build for iOS if targeting iOS
     if env::var("TARGET").unwrap_or_default().contains("ios") {

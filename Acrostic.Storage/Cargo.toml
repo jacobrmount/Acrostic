@@ -1,10 +1,10 @@
 [package]
-name = "nactions_blockchain_core"
+name = "acrostic_storage"
 version = "0.1.0"
 edition = "2021"
 
 [lib]
-name = "nactions_blockchain_core"
+name = "acrostic_storage"
 # This creates a dynamic library that can be used by Swift
 crate-type = ["staticlib", "cdylib"]
 

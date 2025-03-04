@@ -270,6 +270,7 @@
 				42108C4B2D777EA9005CA059 /* Resources */,
 				42108CBF2D77828C005CA059 /* Embed Frameworks */,
 				42108D402D778488005CA059 /* Embed Foundation Extensions */,
+				425ED7E32D77955200A17EB9 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -504,6 +505,26 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		425ED7E32D77955200A17EB9 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Skip during indexing\nif [ \"$ACTION\" = \"indexbuild\" ]; then\n    exit 0\nfi\n\n# Check if Rust is installed\nif ! command -v rustc &> /dev/null; then\n    echo \"Error: Rust is not installed. Please install Rust to build this project.\"\n    echo \"Visit https://www.rust-lang.org/tools/install for installation instructions.\"\n    exit 1\nfi\n\n# Path to repository root - navigate up from the Xcode project\nREPO_ROOT=$(cd \"${PROJECT_DIR}/..\" && pwd)\n\n# Path to the Rust project (Acrostic.Storage)\nRUST_PROJECT_PATH=\"${REPO_ROOT}/Acrostic.Storage\"\n\n# Target directory\nTARGET_DIR=\"${RUST_PROJECT_PATH}/target\"\n\n# Architecture configurations\nif [ \"${PLATFORM_NAME}\" = \"iphonesimulator\" ]; then\n    RUST_TARGET=\"x86_64-apple-ios\"\n    if [ \"${ARCHS}\" = \"arm64\" ]; then\n        RUST_TARGET=\"aarch64-apple-ios-sim\"\n    fi\nelse\n    RUST_TARGET=\"aarch64-apple-ios\"\nfi\n\n# Ensure Rust targets are installed\nrustup target add ${RUST_TARGET}\n\n# Build the Rust library\necho \"Building Rust library from ${RUST_PROJECT_PATH}...\"\ncd \"${RUST_PROJECT_PATH}\"\n\n# Check for any custom Cargo settings\nif [ -f \".cargo/config.toml\" ]; then\n    echo \"Using custom Cargo configuration\"\nfi\n\n# Build the library\ncargo build --target ${RUST_TARGET} --release\n\n# Verify build succeeded\nif [ $? -ne 0 ]; then\n    echo \"Error: Rust build failed\"\n    exit 1\nfi\n\n# Create destination directories\nmkdir -p \"${BUILT_PRODUCTS_DIR}\"\nmkdir -p \"${BUILT_PRODUCTS_DIR}/include\"\n\n# Copy the built library to the right place\necho \"Copying library from ${TARGET_DIR}/${RUST_TARGET}/release/ to ${BUILT_PRODUCTS_DIR}\"\ncp \"${TARGET_DIR}/${RUST_TARGET}/src/lib.a\" \"${BUILT_PRODUCTS_DIR}\"\n\n# Copy header to include directory\necho \"Copying headers to ${BUILT_PRODUCTS_DIR}/include/\"\ncp \"${RUST_PROJECT_PATH}/include/acrostic_storage.h\" \"${BUILT_PRODUCTS_DIR}/include/\"\n\necho \"Successfully built and copied Rust library\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		42108C492D777EA9005CA059 /* Sources */ = {
