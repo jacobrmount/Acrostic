@@ -19,9 +19,13 @@ public final class TokenDataController {
     public func fetchTokens() -> [NotionToken] {
         do {
             let context = CoreDataStack.shared.viewContext
+<<<<<<< HEAD
             
             // Using the new Token entity name
             let request = NSFetchRequest<NSManagedObject>(entityName: "Token")
+=======
+            let request: NSFetchRequest<TokenEntity> = TokenEntity.fetchRequest()
+>>>>>>> 8dc50959b95c7c94a3376f7d3f46a2596c288be4
             request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
             
             let tokenEntities = try context.fetch(request)
@@ -96,6 +100,7 @@ public final class TokenDataController {
     public func fetchToken(id: UUID) -> NSManagedObject? {
         let context = CoreDataStack.shared.viewContext
         
+<<<<<<< HEAD
         // First, ensure Token exists in the model
         let entityNames = context.persistentStoreCoordinator?.managedObjectModel.entities.map { $0.name } ?? []
         if !entityNames.contains("Token") {
@@ -104,6 +109,16 @@ public final class TokenDataController {
         }
         
         let request = NSFetchRequest<NSManagedObject>(entityName: "Token")
+=======
+        // First, ensure TokenEntity exists in the model
+        let entityNames = context.persistentStoreCoordinator?.managedObjectModel.entities.map { $0.name } ?? []
+        if !entityNames.contains("TokenEntity") {
+            print("⚠️ TokenEntity not found in model, cannot fetch token")
+            return nil
+        }
+        
+        let request = NSFetchRequest<TokenEntity>(entityName: "TokenEntity")
+>>>>>>> 8dc50959b95c7c94a3376f7d3f46a2596c288be4
         request.predicate = NSPredicate(format: "id == %@", id as CVarArg)
         request.fetchLimit = 1
         
@@ -123,10 +138,17 @@ public final class TokenDataController {
     public func saveToken(name: String, apiToken: String) -> NSManagedObject? {
         let context = CoreDataStack.shared.viewContext
         
+<<<<<<< HEAD
         // Check if Token exists in model
         let entityNames = context.persistentStoreCoordinator?.managedObjectModel.entities.map { $0.name } ?? []
         if !entityNames.contains("Token") {
             print("⚠️ Token not found in model, cannot save token")
+=======
+        // Check if TokenEntity exists in model
+        let entityNames = context.persistentStoreCoordinator?.managedObjectModel.entities.map { $0.name } ?? []
+        if !entityNames.contains("TokenEntity") {
+            print("⚠️ TokenEntity not found in model, cannot save token")
+>>>>>>> 8dc50959b95c7c94a3376f7d3f46a2596c288be4
             
             // Fallback: Store in keychain only
             let tokenUUID = UUID()
@@ -163,8 +185,13 @@ public final class TokenDataController {
             print("Error saving token: \(error)")
             
             // Fallback: Store in keychain only
+<<<<<<< HEAD
             storeSecureToken(apiToken, for: id.uuidString)
             print("✅ Token stored in keychain only with ID: \(id.uuidString)")
+=======
+            storeSecureToken(apiToken, for: tokenEntity.id!.uuidString)
+            print("✅ Token stored in keychain only with ID: \(tokenEntity.id!.uuidString)")
+>>>>>>> 8dc50959b95c7c94a3376f7d3f46a2596c288be4
             
             return nil
         }
@@ -176,10 +203,17 @@ public final class TokenDataController {
                            workspaceName: String? = nil, apiToken: String? = nil) {
         let context = CoreDataStack.shared.viewContext
         
+<<<<<<< HEAD
         // Check if Token exists in model
         let entityNames = context.persistentStoreCoordinator?.managedObjectModel.entities.map { $0.name } ?? []
         if !entityNames.contains("Token") {
             print("⚠️ Token not found in model, cannot update token")
+=======
+        // Check if TokenEntity exists in model
+        let entityNames = context.persistentStoreCoordinator?.managedObjectModel.entities.map { $0.name } ?? []
+        if !entityNames.contains("TokenEntity") {
+            print("⚠️ TokenEntity not found in model, cannot update token")
+>>>>>>> 8dc50959b95c7c94a3376f7d3f46a2596c288be4
             
             // Update keychain token if needed
             if let apiToken = apiToken {
@@ -189,7 +223,11 @@ public final class TokenDataController {
             return
         }
         
+<<<<<<< HEAD
         let request = NSFetchRequest<NSManagedObject>(entityName: "Token")
+=======
+        let request: NSFetchRequest<TokenEntity> = TokenEntity.fetchRequest()
+>>>>>>> 8dc50959b95c7c94a3376f7d3f46a2596c288be4
         request.predicate = NSPredicate(format: "id == %@", id as CVarArg)
         
         do {
@@ -246,15 +284,26 @@ public final class TokenDataController {
     public func deleteToken(id: UUID) {
         let context = CoreDataStack.shared.viewContext
         
+<<<<<<< HEAD
         // Check if Token exists in model
         let entityNames = context.persistentStoreCoordinator?.managedObjectModel.entities.map { $0.name } ?? []
         if !entityNames.contains("Token") {
             print("⚠️ Token not found in model, deleting token from keychain only")
+=======
+        // Check if TokenEntity exists in model
+        let entityNames = context.persistentStoreCoordinator?.managedObjectModel.entities.map { $0.name } ?? []
+        if !entityNames.contains("TokenEntity") {
+            print("⚠️ TokenEntity not found in model, deleting token from keychain only")
+>>>>>>> 8dc50959b95c7c94a3376f7d3f46a2596c288be4
             removeSecureToken(for: id.uuidString)
             return
         }
         
+<<<<<<< HEAD
         let request = NSFetchRequest<NSManagedObject>(entityName: "Token")
+=======
+        let request: NSFetchRequest<TokenEntity> = TokenEntity.fetchRequest()
+>>>>>>> 8dc50959b95c7c94a3376f7d3f46a2596c288be4
         request.predicate = NSPredicate(format: "id == %@", id as CVarArg)
         
         do {

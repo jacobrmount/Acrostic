@@ -28,7 +28,11 @@ public final class CoreDataStack {
     }
     
     private init() {
+<<<<<<< HEAD
         if let modelURL = Bundle(for: CoreDataStack.self).url(forResource: "CoreData", withExtension: "momd") {
+=======
+        if let modelURL = Bundle(for: CoreDataStack.self).url(forResource: "AcrosticDataModel", withExtension: "momd") {
+>>>>>>> 8dc50959b95c7c94a3376f7d3f46a2596c288be4
             // Log model URL for debugging
             print("Looking for data model at: \(modelURL)")
             
@@ -39,7 +43,11 @@ public final class CoreDataStack {
             }
             
             // Create persistent container with the loaded model
+<<<<<<< HEAD
             persistentContainer = NSPersistentContainer(name: "CoreData", managedObjectModel: model!)
+=======
+            persistentContainer = NSPersistentContainer(name: "AcrosticDataModel", managedObjectModel: model!)
+>>>>>>> 8dc50959b95c7c94a3376f7d3f46a2596c288be4
         } else {
             // Log model not found
             print("❌ CoreData model not found in bundle paths")
@@ -61,17 +69,176 @@ public final class CoreDataStack {
                 }
             }
             
+<<<<<<< HEAD
             // Create a temporary empty model as a fallback
             print("⚠️ Using fallback empty model - functionality will be limited")
             let managedObjectModel = NSManagedObjectModel()
             
             // Create persistent container with the fallback model
             persistentContainer = NSPersistentContainer(name: "CoreData", managedObjectModel: managedObjectModel)
+=======
+            // Create an in-memory model as a fallback
+            print("⚠️ Using fallback model description")
+            
+            // Create a managed object model programmatically
+            let managedObjectModel = NSManagedObjectModel()
+            
+            // Create Token entity
+            let tokenEntity = NSEntityDescription()
+            tokenEntity.name = "TokenEntity"
+            tokenEntity.managedObjectClassName = "TokenEntity"
+            
+            // Create Token attributes
+            let idAttribute = NSAttributeDescription()
+            idAttribute.name = "id"
+            idAttribute.attributeType = .UUIDAttributeType
+            idAttribute.isOptional = true
+            
+            let nameAttribute = NSAttributeDescription()
+            nameAttribute.name = "name"
+            nameAttribute.attributeType = .stringAttributeType
+            nameAttribute.isOptional = true
+            
+            let connectionStatusAttribute = NSAttributeDescription()
+            connectionStatusAttribute.name = "connectionStatus"
+            connectionStatusAttribute.attributeType = .booleanAttributeType
+            connectionStatusAttribute.isOptional = false
+            
+            let isActivatedAttribute = NSAttributeDescription()
+            isActivatedAttribute.name = "isActivated"
+            isActivatedAttribute.attributeType = .booleanAttributeType
+            isActivatedAttribute.isOptional = false
+            
+            let workspaceIDAttribute = NSAttributeDescription()
+            workspaceIDAttribute.name = "workspaceID"
+            workspaceIDAttribute.attributeType = .stringAttributeType
+            workspaceIDAttribute.isOptional = true
+            
+            let workspaceNameAttribute = NSAttributeDescription()
+            workspaceNameAttribute.name = "workspaceName"
+            workspaceNameAttribute.attributeType = .stringAttributeType
+            workspaceNameAttribute.isOptional = true
+            
+            let lastValidatedAttribute = NSAttributeDescription()
+            lastValidatedAttribute.name = "lastValidated"
+            lastValidatedAttribute.attributeType = .dateAttributeType
+            lastValidatedAttribute.isOptional = true
+            
+            // Add attributes to entity
+            tokenEntity.properties = [
+                idAttribute,
+                nameAttribute,
+                connectionStatusAttribute,
+                isActivatedAttribute,
+                workspaceIDAttribute,
+                workspaceNameAttribute,
+                lastValidatedAttribute
+            ]
+            
+            // Create a relationship to DatabaseEntity
+            let databasesRelationship = NSRelationshipDescription()
+            databasesRelationship.name = "databases"
+            databasesRelationship.destinationEntity = nil // Will be set after creating DatabaseEntity
+            databasesRelationship.maxCount = 0
+            databasesRelationship.deleteRule = .nullifyDeleteRule
+            databasesRelationship.isOptional = true
+            
+            // Create Database entity
+            let dbEntity = NSEntityDescription()
+            dbEntity.name = "DatabaseEntity"
+            dbEntity.managedObjectClassName = "DatabaseEntity"
+            
+            // Create database attributes
+            let dbIdAttribute = NSAttributeDescription()
+            dbIdAttribute.name = "id"
+            dbIdAttribute.attributeType = .stringAttributeType
+            dbIdAttribute.isOptional = true
+            
+            let titleAttribute = NSAttributeDescription()
+            titleAttribute.name = "title"
+            titleAttribute.attributeType = .stringAttributeType
+            titleAttribute.isOptional = true
+            
+            let descAttribute = NSAttributeDescription()
+            descAttribute.name = "databaseDescription"
+            descAttribute.attributeType = .stringAttributeType
+            descAttribute.isOptional = true
+            
+            let createdTimeAttribute = NSAttributeDescription()
+            createdTimeAttribute.name = "createdTime"
+            createdTimeAttribute.attributeType = .dateAttributeType
+            createdTimeAttribute.isOptional = true
+            
+            let lastEditedTimeAttribute = NSAttributeDescription()
+            lastEditedTimeAttribute.name = "lastEditedTime"
+            lastEditedTimeAttribute.attributeType = .dateAttributeType
+            lastEditedTimeAttribute.isOptional = true
+            
+            let lastSyncTimeAttribute = NSAttributeDescription()
+            lastSyncTimeAttribute.name = "lastSyncTiime" // Match the typo in your code
+            lastSyncTimeAttribute.attributeType = .dateAttributeType
+            lastSyncTimeAttribute.isOptional = true
+            
+            let urlAttribute = NSAttributeDescription()
+            urlAttribute.name = "url"
+            urlAttribute.attributeType = .stringAttributeType
+            urlAttribute.isOptional = true
+            
+            let widgetEnabledAttribute = NSAttributeDescription()
+            widgetEnabledAttribute.name = "widgetEnabled"
+            widgetEnabledAttribute.attributeType = .booleanAttributeType
+            widgetEnabledAttribute.isOptional = false
+            
+            let widgetTypeAttribute = NSAttributeDescription()
+            widgetTypeAttribute.name = "widgetType"
+            widgetTypeAttribute.attributeType = .stringAttributeType
+            widgetTypeAttribute.isOptional = true
+            
+            // Create database-token relationship
+            let tokenRelationship = NSRelationshipDescription()
+            tokenRelationship.name = "token"
+            tokenRelationship.destinationEntity = tokenEntity
+            tokenRelationship.maxCount = 1
+            tokenRelationship.deleteRule = .nullifyDeleteRule
+            tokenRelationship.isOptional = true
+            
+            // Set up inverse relationships
+            databasesRelationship.destinationEntity = dbEntity
+            databasesRelationship.inverseRelationship = tokenRelationship
+            tokenRelationship.inverseRelationship = databasesRelationship
+            
+            // Add attributes to database entity
+            dbEntity.properties = [
+                dbIdAttribute,
+                titleAttribute,
+                descAttribute,
+                createdTimeAttribute,
+                lastEditedTimeAttribute,
+                lastSyncTimeAttribute,
+                urlAttribute,
+                widgetEnabledAttribute,
+                widgetTypeAttribute,
+                tokenRelationship
+            ]
+            
+            // Add the relationships to token entity
+            tokenEntity.properties = tokenEntity.properties + [databasesRelationship]
+            
+            // Set entities on the model
+            managedObjectModel.entities = [tokenEntity, dbEntity]
+            
+            // Create persistent container with the fallback model
+            persistentContainer = NSPersistentContainer(name: "AcrosticDataModel", managedObjectModel: managedObjectModel)
+>>>>>>> 8dc50959b95c7c94a3376f7d3f46a2596c288be4
         }
         
         // Set the store URL to the shared app group container for widget access
         if let appGroupURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.com.acrostic") {
+<<<<<<< HEAD
             let storeURL = appGroupURL.appendingPathComponent("CoreData.sqlite")
+=======
+            let storeURL = appGroupURL.appendingPathComponent("AcrosticDataModel.sqlite")
+>>>>>>> 8dc50959b95c7c94a3376f7d3f46a2596c288be4
             let description = NSPersistentStoreDescription(url: storeURL)
             
             // Enable automatic migration
@@ -151,6 +318,14 @@ public final class CoreDataStack {
                     print("⚠️ CoreData error encountered, continuing with limited functionality")
                     #endif
                 }
+<<<<<<< HEAD
+=======
+                
+                // Don't crash in production
+                #if DEBUG
+                print("⚠️ CoreData error encountered, continuing with limited functionality")
+                #endif
+>>>>>>> 8dc50959b95c7c94a3376f7d3f46a2596c288be4
             } else {
                 print("✅ Successfully loaded persistent store: \(storeDescription.url?.path ?? "unknown")")
             }
