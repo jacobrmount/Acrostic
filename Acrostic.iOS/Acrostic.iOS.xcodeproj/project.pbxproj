@@ -7,15 +7,25 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4208B46F2D79252900654BC6 /* AcrostiKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42108CA62D77828C005CA059 /* AcrostiKit.framework */; };
+		4208B4702D79252900654BC6 /* AcrostiKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 42108CA62D77828C005CA059 /* AcrostiKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		42108CAE2D77828C005CA059 /* AcrostiKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42108CA62D77828C005CA059 /* AcrostiKit.framework */; };
 		42108CB92D77828C005CA059 /* AcrostiKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42108CA62D77828C005CA059 /* AcrostiKit.framework */; };
 		42108CBA2D77828C005CA059 /* AcrostiKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 42108CA62D77828C005CA059 /* AcrostiKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		42108D282D778486005CA059 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42108D272D778486005CA059 /* WidgetKit.framework */; };
 		42108D2A2D778486005CA059 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42108D292D778486005CA059 /* SwiftUI.framework */; };
 		42108D3B2D778488005CA059 /* AcrosticWidgetsExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 42108D252D778486005CA059 /* AcrosticWidgetsExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		429BB9D42D7AAB5B0043DF45 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 429BB9D32D7AAB5B0043DF45 /* SwiftUI.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		4208B4712D79252900654BC6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 42108C452D777EA9005CA059 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 42108CA52D77828C005CA059;
+			remoteInfo = AcrostiKit;
+		};
 		42108C652D777EAB005CA059 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 42108C452D777EA9005CA059 /* Project object */;
@@ -61,6 +71,17 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		4208B4732D79252900654BC6 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				4208B4702D79252900654BC6 /* AcrostiKit.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		42108CBF2D77828C005CA059 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -94,13 +115,15 @@
 		42108D252D778486005CA059 /* AcrosticWidgetsExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = AcrosticWidgetsExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		42108D272D778486005CA059 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		42108D292D778486005CA059 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		429BB9D32D7AAB5B0043DF45 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.2.sdk/System/Library/Frameworks/SwiftUI.framework; sourceTree = DEVELOPER_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
 		42108C762D777EAB005CA059 /* Exceptions for "Acrostic.iOS" folder in "Acrostic.iOS" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				Info.plist,
+				CoreData/Acrostic_iOS.xcdatamodeld,
+				Resources/Info.plist,
 			);
 			target = 42108C4C2D777EA9005CA059 /* Acrostic.iOS */;
 		};
@@ -157,6 +180,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				429BB9D42D7AAB5B0043DF45 /* SwiftUI.framework in Frameworks */,
 				42108CB92D77828C005CA059 /* AcrostiKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -194,6 +218,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4208B46F2D79252900654BC6 /* AcrostiKit.framework in Frameworks */,
 				42108D2A2D778486005CA059 /* SwiftUI.framework in Frameworks */,
 				42108D282D778486005CA059 /* WidgetKit.framework in Frameworks */,
 			);
@@ -232,6 +257,7 @@
 		42108D262D778486005CA059 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				429BB9D32D7AAB5B0043DF45 /* SwiftUI.framework */,
 				42108D272D778486005CA059 /* WidgetKit.framework */,
 				42108D292D778486005CA059 /* SwiftUI.framework */,
 			);
@@ -377,10 +403,12 @@
 				42108D212D778486005CA059 /* Sources */,
 				42108D222D778486005CA059 /* Frameworks */,
 				42108D232D778486005CA059 /* Resources */,
+				4208B4732D79252900654BC6 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				4208B4722D79252900654BC6 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				42108D2B2D778486005CA059 /* AcrosticWidgets */,
@@ -541,6 +569,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		4208B4722D79252900654BC6 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 42108CA52D77828C005CA059 /* AcrostiKit */;
+			targetProxy = 4208B4712D79252900654BC6 /* PBXContainerItemProxy */;
+		};
 		42108C662D777EAB005CA059 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 42108C4C2D777EA9005CA059 /* Acrostic.iOS */;
@@ -579,15 +612,15 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = Acrostic.iOS/Acrostic_iOS.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Acrostic.iOS/Resources/Acrostic_iOS.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"Acrostic.iOS/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"Acrostic.iOS/Resources\"";
 				DEVELOPMENT_TEAM = FZ8DWDX6A5;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = Acrostic.iOS/Info.plist;
+				INFOPLIST_FILE = Acrostic.iOS/Resources/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Acrostic;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				INFOPLIST_KEY_NSFaceIDUsageDescription = "This app uses Face ID to secure access to your tokens.";
@@ -623,15 +656,15 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = Acrostic.iOS/Acrostic_iOS.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Acrostic.iOS/Resources/Acrostic_iOS.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"Acrostic.iOS/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"Acrostic.iOS/Resources\"";
 				DEVELOPMENT_TEAM = FZ8DWDX6A5;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = Acrostic.iOS/Info.plist;
+				INFOPLIST_FILE = Acrostic.iOS/Resources/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Acrostic;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				INFOPLIST_KEY_NSFaceIDUsageDescription = "This app uses Face ID to secure access to your tokens.";
@@ -719,6 +752,7 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_PACKAGE_NAME = "";
 			};
@@ -774,6 +808,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_PACKAGE_NAME = "";
 			};
 			name = Release;
@@ -1032,6 +1067,10 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1061,6 +1100,10 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

@@ -13,9 +13,9 @@ struct ContentView: View {
                 }
                 .tag(AppTab.tokens)
             
-            DatabaseView()
+            FileSelectorView()
                 .tabItem {
-                    Label("Databases", systemImage: "server.rack")
+                    Label("File Select", systemImage: "folder")
                 }
                 .tag(AppTab.databases)
         }

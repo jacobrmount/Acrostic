@@ -105,7 +105,7 @@ struct ProgressWidgetProvider: AppIntentTimelineProvider {
         let token = tokenDataController.fetchToken(id: tokenUUID)
         
         // If we can't find the token, throw an error
-        guard let token = token,
+        guard token != nil,
               let apiToken = AcrostiKit.TokenDataController.shared.getSecureToken(for: tokenUUID.uuidString) else {
             throw WidgetError.tokenNotFound
         }
@@ -113,7 +113,7 @@ struct ProgressWidgetProvider: AppIntentTimelineProvider {
         // Create NotionToken
         let notionToken = NotionToken(
             id: tokenUUID,
-            name: token.name ?? "Unknown",
+            name: title,
             apiToken: apiToken
         )
         
