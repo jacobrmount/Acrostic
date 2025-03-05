@@ -60,3 +60,9 @@ fastlane/report.xml
 fastlane/Preview.html
 fastlane/screenshots/**/*.png
 fastlane/test_output
+
+# Additional entries
+Claude.md
+node_modules/
+package-lock.json
+package.json
