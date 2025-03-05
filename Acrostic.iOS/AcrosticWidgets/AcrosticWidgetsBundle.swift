@@ -1,7 +1,15 @@
 // AcrosticWidgets/AcrosticWidgetsBundle.swift
 import WidgetKit
 import SwiftUI
+import AppIntents
 import AcrostiKit
+
+extension TaskWidgetConfigurationIntent {
+    static var databaseProvider: DatabaseQueryIntent {
+        let provider = DatabaseQueryIntent()
+        return provider
+    }
+}
 
 // MARK: - Task List Widget
 struct TaskListWidget: Widget {

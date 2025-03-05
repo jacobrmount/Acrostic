@@ -6,15 +6,14 @@ import AcrostiKit
 struct TokenView: View {
     @ObservedObject var tokenManager = TokenService.shared
     @State private var showingAddToken = false
-    @State private var tokenToEdit: NotionToken?
-    @State private var tokenToDelete: NotionToken?
+    @State private var tokenToEdit: TokenEntity? = nil
+    @State private var tokenToDelete: TokenEntity? = nil
     @State private var showingDeleteConfirmation = false
     @State private var showingExportSuccess = false
     @State private var showingImportSuccess = false
     @State private var showingImportFailure = false
 
     var body: some View {
-        // iOS maintains NavigationView and floating button design
         NavigationView {
             tokenListContent
                 .navigationTitle("Tokens")
@@ -33,16 +32,21 @@ struct TokenView: View {
                     }
                 )
                 .sheet(isPresented: $showingAddToken) {
-                    AddTokenView(tokenToEdit: $tokenToEdit, isPresented: $showingAddToken)
-                        .presentationDetents([.medium, .large])
-                        .presentationDragIndicator(.visible)
+                    AddTokenView(
+                        tokenToEdit: Binding(
+                            get: { tokenToEdit },
+                            set: { tokenToEdit = $0 }
+                        ),
+                        isPresented: $showingAddToken
+                    )
+                    .presentationDetents([.medium, .large])
+                    .presentationDragIndicator(.visible)
                 }
                 .alert("Export Successful", isPresented: $showingExportSuccess) {
                     Button("OK", role: .cancel) {}
                 }
                 .alert("Import Successful", isPresented: $showingImportSuccess) {
                     Button("OK", role: .cancel) {
-                        // Force refresh when dismissed
                         tokenManager.loadTokens()
                     }
                 }
@@ -50,7 +54,6 @@ struct TokenView: View {
                     Button("OK", role: .cancel) {}
                 }
                 .onAppear {
-                    // Force a refresh of tokens when view appears
                     tokenManager.loadTokens()
                 }
         }
@@ -67,36 +70,33 @@ struct TokenView: View {
                     List {
                         ForEach(tokenManager.tokens, id: \.id) { token in
                             HStack {
-                                // Checkbox for token activation
                                 Button(action: {
-                                    // Only allow toggling if token is connected
-                                    if token.isConnected {
-                                        tokenManager.toggleTokenActivation(token: token)
-                                    }
+                                    tokenManager.toggleTokenActivation(token: token)
                                 }) {
                                     Image(systemName: token.isActivated ? "checkmark.square.fill" : "square")
-                                        .foregroundColor(token.isConnected ? .blue : .gray)
+                                        .foregroundColor(token.connectionStatus ? .blue : .gray)
                                         .imageScale(.large)
+                                        .frame(width: 44, height: 44)
+                                        .contentShape(Rectangle())
                                 }
                                 .buttonStyle(PlainButtonStyle())
-                                .disabled(!token.isConnected)
+                                .disabled(!token.connectionStatus)
+                                .help(token.connectionStatus ? "Click to toggle activation" : "Connection required to activate")
                                 
-                                // Token details and edit button
                                 Button(action: {
                                     tokenToEdit = token
                                     showingAddToken = true
                                 }) {
-                                    Text(token.name)
+                                    Text(token.workspaceName ?? "Unknown")
                                         .font(.headline)
                                         .foregroundColor(.white)
                                         .padding()
                                         .frame(maxWidth: .infinity, alignment: .leading)
-                                        .background(token.isConnected ? Color.green.opacity(0.7) : Color.red.opacity(0.7))
+                                        .background(token.connectionStatus ? Color.green.opacity(0.7) : Color.red.opacity(0.7))
                                         .cornerRadius(8)
                                 }
                                 .buttonStyle(PlainButtonStyle())
                                 
-                                // Delete button
                                 Button(action: {
                                     tokenToDelete = token
                                     showingDeleteConfirmation = true
@@ -112,7 +112,6 @@ struct TokenView: View {
                 }
             }
             
-            // Add Token Button (different style per platform)
             VStack {
                 Spacer()
                 HStack {
@@ -121,7 +120,6 @@ struct TokenView: View {
                         tokenToEdit = nil
                         showingAddToken = true
                     }) {
-                        // iOS floating button style
                         Image(systemName: "plus.circle.fill")
                             .font(.system(size: 50))
                             .foregroundColor(.blue)
@@ -160,9 +158,8 @@ struct TokenView: View {
     private func importTokens() {
         TokenBackupManager.importTokens { success in
             if success {
-                // Force refresh before showing the success message
                 DispatchQueue.main.async {
-                    self.tokenManager.loadTokens()
+                    tokenManager.loadTokens()
                 }
                 showingImportSuccess = true
             } else {

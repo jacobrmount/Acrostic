@@ -130,7 +130,7 @@ struct TaskWidgetProvider: AppIntentTimelineProvider {
         // Create NotionToken
         let notionToken = NotionToken(
             id: tokenUUID,
-            name: token.name ?? "Unknown",
+            name: token.value(forKey: "name") as? String ?? "Unknown",
             apiToken: apiToken
         )
         

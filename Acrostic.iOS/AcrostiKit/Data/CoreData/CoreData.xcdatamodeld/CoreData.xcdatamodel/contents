@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="23605" systemVersion="24D70" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithSwiftData="YES" userDefinedModelVersionIdentifier="">
+    <entity name="Block" representedClassName="BlockEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="archived" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="createdTime" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="data" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromDataTransformerName" customClassName="NSDictionary"/>
+        <attribute name="id" optional="YES" attributeType="String"/>
+        <attribute name="inTrash" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="lastEditedTime" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="type" optional="YES" attributeType="String"/>
+        <relationship name="children" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Block" inverseName="parentBlock" inverseEntity="Block"/>
+        <relationship name="comments" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Comment" inverseName="parentBlock" inverseEntity="Comment"/>
+        <relationship name="parentBlock" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Block" inverseName="children" inverseEntity="Block"/>
+        <relationship name="parentPage" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Page" inverseName="blocks" inverseEntity="Page"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="id"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="Comment" representedClassName="CommentEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="createdTime" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="discussionId" optional="YES" attributeType="String"/>
+        <attribute name="id" optional="YES" attributeType="String"/>
+        <attribute name="lastEditedTime" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="richText" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromDataTransformerName" customClassName="NSDictionary"/>
+        <relationship name="author" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="commentsCreated" inverseEntity="User"/>
+        <relationship name="parentBlock" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Block" inverseName="comments" inverseEntity="Block"/>
+        <relationship name="parentPage" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Page" inverseName="comments" inverseEntity="Page"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="id"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="Database" representedClassName="DatabaseEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="archived" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="createdTime" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="id" optional="YES" attributeType="String"/>
+        <attribute name="inTrash" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="lastEditedTime" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="properties" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromDataTransformerName" customClassName="NSDictionary"/>
+        <attribute name="title" optional="YES" attributeType="String"/>
+        <attribute name="tokenID" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="url" optional="YES" attributeType="String"/>
+        <attribute name="widgetEnabled" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <relationship name="cover" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FileReference" inverseName="coverForDatabases" inverseEntity="FileReference"/>
+        <relationship name="icon" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Icon" inverseName="iconForDatabases" inverseEntity="Icon"/>
+        <relationship name="pages" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Page" inverseName="parentDatabase" inverseEntity="Page"/>
+        <relationship name="parentPage" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Page" inverseName="childDatabases" inverseEntity="Page"/>
+        <relationship name="queries" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Query" inverseName="database" inverseEntity="Query"/>
+        <relationship name="tasks" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Task" inverseName="database" inverseEntity="Task"/>
+        <relationship name="token" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Token" inverseName="databases" inverseEntity="Token"/>
+        <relationship name="widgetConfiguration" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="WidgetConfiguration" inverseName="database" inverseEntity="WidgetConfiguration"/>
+        <fetchedProperty name="recentPages" optional="YES">
+            <fetchRequest name="fetchedPropertyFetchRequest" entity="Database"/>
+        </fetchedProperty>
+        <fetchIndex name="byTokenIDIndex">
+            <fetchIndexElement property="tokenID" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="byWidgetEnabledIndex">
+            <fetchIndexElement property="widgetEnabled" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="byTokenAndWidgetEnabledIndex">
+            <fetchIndexElement property="tokenID" type="Binary" order="ascending"/>
+            <fetchIndexElement property="widgetEnabled" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="id"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="FileReference" representedClassName="FileReferenceEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="expiryTime" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="type" optional="YES" attributeType="String"/>
+        <attribute name="url" optional="YES" attributeType="String"/>
+        <relationship name="coverForDatabases" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Database" inverseName="cover" inverseEntity="Database"/>
+        <relationship name="coverForPages" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Page" inverseName="cover" inverseEntity="Page"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="id"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="Icon" representedClassName="IconEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="emoji" optional="YES" attributeType="String"/>
+        <attribute name="fileUrl" optional="YES" attributeType="String"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="type" optional="YES" attributeType="String"/>
+        <relationship name="iconForDatabases" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Database" inverseName="icon" inverseEntity="Database"/>
+        <relationship name="iconForPages" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Page" inverseName="icon" inverseEntity="Page"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="id"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="Item" representedClassName="Item" syncable="YES" codeGenerationType="class">
+        <attribute name="createdTime" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="id" optional="YES" attributeType="String"/>
+        <attribute name="itemType" optional="YES" attributeType="String"/>
+        <attribute name="lastEditedTime" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <relationship name="createdBy" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="createdItems" inverseEntity="User"/>
+        <relationship name="lastEditedBy" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="modifiedItems" inverseEntity="User"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="id"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="Page" representedClassName="PageEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="archived" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="createdTime" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="databaseID" optional="YES" attributeType="String"/>
+        <attribute name="id" optional="YES" attributeType="String"/>
+        <attribute name="inTrash" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="lastEditedTime" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="lastSyncTime" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="properties" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromDataTransformerName" customClassName="NSDictionary"/>
+        <attribute name="publicUrl" optional="YES" attributeType="String"/>
+        <attribute name="title" optional="YES" attributeType="String"/>
+        <attribute name="url" optional="YES" attributeType="String"/>
+        <relationship name="blocks" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Block" inverseName="parentPage" inverseEntity="Block"/>
+        <relationship name="childDatabases" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Database" inverseName="parentPage" inverseEntity="Database"/>
+        <relationship name="childPages" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Page" inverseName="parentPage" inverseEntity="Page"/>
+        <relationship name="comments" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Comment" inverseName="parentPage" inverseEntity="Comment"/>
+        <relationship name="cover" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="FileReference" inverseName="coverForPages" inverseEntity="FileReference"/>
+        <relationship name="icon" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Icon" inverseName="iconForPages" inverseEntity="Icon"/>
+        <relationship name="parentDatabase" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Database" inverseName="pages" inverseEntity="Database"/>
+        <relationship name="parentPage" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Page" inverseName="childPages" inverseEntity="Page"/>
+        <relationship name="task" optional="YES" maxCount="1" deletionRule="Cascade" destinationEntity="Task" inverseName="page" inverseEntity="Task"/>
+        <fetchIndex name="byDatabaseIDIndex">
+            <fetchIndexElement property="databaseID" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="byLastEditedTimeIndex">
+            <fetchIndexElement property="lastEditedTime" type="Binary" order="descending"/>
+        </fetchIndex>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="id"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="Query" representedClassName="QueryEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="createdAt" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="databaseID" optional="YES" attributeType="String"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="queryData" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromDataTransformerName" customClassName="NSDictionary"/>
+        <relationship name="database" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Database" inverseName="queries" inverseEntity="Database"/>
+        <fetchIndex name="byDatabaseIDIndex">
+            <fetchIndexElement property="databaseID" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="id"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="Task" representedClassName="TaskEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="databaseID" optional="YES" attributeType="String"/>
+        <attribute name="dueDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="id" optional="YES" attributeType="String"/>
+        <attribute name="isCompleted" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="lastSyncTime" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="title" optional="YES" attributeType="String"/>
+        <relationship name="database" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Database" inverseName="tasks" inverseEntity="Database"/>
+        <relationship name="page" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Page" inverseName="task" inverseEntity="Page"/>
+        <relationship name="token" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Token" inverseName="task" inverseEntity="Token"/>
+        <fetchIndex name="byCompletionIndex">
+            <fetchIndexElement property="isCompleted" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="byDueDateIndex">
+            <fetchIndexElement property="dueDate" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="byDatabaseIDIndex">
+            <fetchIndexElement property="databaseID" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="byDatabaseAndCompletionIndex">
+            <fetchIndexElement property="databaseID" type="Binary" order="ascending"/>
+            <fetchIndexElement property="isCompleted" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="id"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="Token" representedClassName="TokenEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="apiToken" optional="YES" attributeType="String"/>
+        <attribute name="connectionStatus" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="isActivated" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="lastValidated" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="workspaceID" optional="YES" attributeType="String"/>
+        <attribute name="workspaceName" optional="YES" attributeType="String"/>
+        <relationship name="databases" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Database" inverseName="token" inverseEntity="Database"/>
+        <relationship name="task" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Task" inverseName="token" inverseEntity="Task"/>
+        <relationship name="user" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="tokens" inverseEntity="User"/>
+        <relationship name="widgetConfigurations" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="WidgetConfiguration" inverseName="token" inverseEntity="WidgetConfiguration"/>
+        <fetchIndex name="byActivatedIndex">
+            <fetchIndexElement property="isActivated" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="id"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="User" representedClassName="UserEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="avatarUrl" optional="YES" attributeType="String"/>
+        <attribute name="email" optional="YES" attributeType="String"/>
+        <attribute name="id" optional="YES" attributeType="String"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="type" optional="YES" attributeType="String"/>
+        <attribute name="workspaceName" optional="YES" attributeType="String"/>
+        <relationship name="commentsCreated" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Comment" inverseName="author" inverseEntity="Comment"/>
+        <relationship name="createdItems" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Item" inverseName="createdBy" inverseEntity="Item"/>
+        <relationship name="modifiedItems" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Item" inverseName="lastEditedBy" inverseEntity="Item"/>
+        <relationship name="tokens" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Token" inverseName="user" inverseEntity="Token"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="id"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <entity name="WidgetConfiguration" representedClassName="WidgetConfigurationEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="configData" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromDataTransformerName" customClassName="NSDictionary"/>
+        <attribute name="databaseID" optional="YES" attributeType="String"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="lastUpdated" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="tokenID" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="widgetFamily" optional="YES" attributeType="String"/>
+        <attribute name="widgetKind" optional="YES" attributeType="String"/>
+        <relationship name="database" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Database" inverseName="widgetConfiguration" inverseEntity="Database"/>
+        <relationship name="token" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Token" inverseName="widgetConfigurations" inverseEntity="Token"/>
+        <fetchIndex name="byTokenIDIndex">
+            <fetchIndexElement property="tokenID" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="byDatabaseIDIndex">
+            <fetchIndexElement property="databaseID" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <fetchIndex name="byWidgetKindIndex">
+            <fetchIndexElement property="widgetKind" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="id"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+    <fetchRequest name="fetchedPropertyFetchRequest" entity="Page" predicateString="parentDatabase == $FETCH_SOURCE AND archived == 0"/>
+</model>

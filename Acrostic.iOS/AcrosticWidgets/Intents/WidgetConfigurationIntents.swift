@@ -2,9 +2,10 @@
 import WidgetKit
 import AppIntents
 import SwiftUI
+import AcrostiKit
 
-// MARK: - Database Entity for Selection
-struct DatabaseEntityIntent: AppEntity {
+// MARK: - Database for Selection
+struct DatabaseIntent: AppEntity {
     var id: String
     var name: String
     var tokenID: UUID
@@ -18,18 +19,18 @@ struct DatabaseEntityIntent: AppEntity {
 }
 
 struct DatabaseQueryIntent: EntityQuery {
-    func entities(for identifiers: [String]) async throws -> [DatabaseEntityIntent] {
-        guard let userDefaults = UserDefaults(suiteName: "group.com.acrostic") else {
+    func entities(for identifiers: [String]) async throws -> [DatabaseIntent] {
+        guard let defaults = UserDefaults(suiteName: AppGroupConfig.appGroupIdentifier) else {
             print("❌ Could not access UserDefaults for app group")
             return []
         }
         
         // Get all selected databases from all tokens
-        var selectedDatabases: [DatabaseEntityIntent] = []
+        var selectedDatabases: [DatabaseIntent] = []
         
         for identifier in identifiers {
             // Search all tokens for this database ID
-            if let dbData = findDatabaseInUserDefaults(userDefaults: userDefaults, databaseID: identifier) {
+            if let dbData = findDatabaseInUserDefaults(userDefaults: defaults, databaseID: identifier) {
                 selectedDatabases.append(dbData)
             }
         }
@@ -37,8 +38,8 @@ struct DatabaseQueryIntent: EntityQuery {
         return selectedDatabases
     }
     
-    func suggestedEntities() async throws -> [DatabaseEntityIntent] {
-        guard let userDefaults = UserDefaults(suiteName: "group.com.acrostic") else {
+    func suggestedEntities() async throws -> [DatabaseIntent] {
+        guard let userDefaults = UserDefaults(suiteName: AppGroupConfig.appGroupIdentifier) else {
             print("❌ Could not access UserDefaults for app group in suggestedEntities")
             return []
         }
@@ -49,20 +50,26 @@ struct DatabaseQueryIntent: EntityQuery {
             return []
         }
         
-        var availableDatabases: [DatabaseEntityIntent] = []
+        var availableDatabases: [DatabaseIntent] = []
         
         // For each token, fetch its databases
         for tokenData in tokenDataArray {
             guard let tokenID = tokenData["id"] as? String,
-                  let uuid = UUID(uuidString: tokenID) else {
+                  let isActive = tokenData["isActivated"] as? Bool,
+                  isActive else {
                 continue
             }
+            
+            let uuid = UUID(uuidString: tokenID) ?? UUID()
             
             // Get all databases for this token
             let key = "acrostic_databases_\(tokenID)"
             guard let databasesData = userDefaults.array(forKey: key) as? [[String: Any]] else {
+                print("⚠️ No databases found for token \(tokenID)")
                 continue
             }
+            
+            print("📊 Found \(databasesData.count) databases for token \(tokenID)")
             
             for db in databasesData {
                 guard let dbID = db["id"] as? String,
@@ -70,37 +77,9 @@ struct DatabaseQueryIntent: EntityQuery {
                     continue
                 }
                 
-                let isSelected = (db["widgetEnabled"] as? Bool) ?? false
-                
-                // Only include widget-enabled databases for better user experience
-                if isSelected {
-                    availableDatabases.append(DatabaseEntityIntent(id: dbID, name: title, tokenID: uuid))
-                }
-            }
-        }
-        
-        // If no widgets are enabled, show all databases
-        if availableDatabases.isEmpty {
-            for tokenData in tokenDataArray {
-                guard let tokenID = tokenData["id"] as? String,
-                      let uuid = UUID(uuidString: tokenID) else {
-                    continue
-                }
-                
-                // Get all databases for this token
-                let key = "acrostic_databases_\(tokenID)"
-                guard let databasesData = userDefaults.array(forKey: key) as? [[String: Any]] else {
-                    continue
-                }
-                
-                for db in databasesData {
-                    guard let dbID = db["id"] as? String,
-                          let title = db["title"] as? String else {
-                        continue
-                    }
-                    
-                    availableDatabases.append(DatabaseEntityIntent(id: dbID, name: title, tokenID: uuid))
-                }
+                // Include all databases, not just widget-enabled ones
+                availableDatabases.append(DatabaseIntent(id: dbID, name: title, tokenID: uuid))
+                print("✅ Added database: \(title) (\(dbID))")
             }
         }
         
@@ -108,7 +87,7 @@ struct DatabaseQueryIntent: EntityQuery {
     }
     
     // Helper to find database data by ID
-    private func findDatabaseInUserDefaults(userDefaults: UserDefaults, databaseID: String) -> DatabaseEntityIntent? {
+    private func findDatabaseInUserDefaults(userDefaults: UserDefaults, databaseID: String) -> DatabaseIntent? {
         // Get all tokens
         guard let tokenDataArray = userDefaults.array(forKey: "acrostic_tokens") as? [[String: Any]] else {
             return nil
@@ -133,7 +112,7 @@ struct DatabaseQueryIntent: EntityQuery {
                     continue
                 }
                 
-                return DatabaseEntityIntent(id: databaseID, name: title, tokenID: uuid)
+                return DatabaseIntent(id: databaseID, name: title, tokenID: uuid)
             }
         }
         
@@ -146,9 +125,23 @@ struct TaskWidgetConfigurationIntent: WidgetConfigurationIntent {
     static var title: LocalizedStringResource = "Task List Configuration"
     static var description: IntentDescription = IntentDescription("Configure the task list widget")
     
-    // Use DatabaseEntityIntent instead of DatabaseEntity to avoid ambiguity
+    // Add the following method:
+    static var presetRecommendations: [TaskWidgetConfigurationIntent] {
+        // Trigger data refresh
+        let appGroupID = "group.com.acrostic"
+        if let defaults = UserDefaults(suiteName: appGroupID) {
+            defaults.set(Date().timeIntervalSince1970, forKey: "widget_config_refresh_timestamp")
+            defaults.synchronize()
+        }
+        
+        // Return default recommendations
+        let intent = TaskWidgetConfigurationIntent()
+        intent.showCompleted = false
+        return [intent]
+    }
+    
     @Parameter(title: "Database")
-    var databaseID: DatabaseEntityIntent?
+    var databaseID: DatabaseIntent?
     
     @Parameter(title: "Show Completed Tasks", default: false)
     var showCompleted: Bool
